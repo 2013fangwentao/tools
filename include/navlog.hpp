@@ -5,7 +5,7 @@
 ** Login   <fangwentao>
 **
 ** Started on  Mon Dec 17 下午3:13:11 2018 little fang
-** Last update Wed Jul 2 21:10:48 2019 little fang
+** Last update Thu Jul 3 13:24:52 2019 little fang
 */
 
 #ifndef NAVLOG_H_
@@ -14,7 +14,7 @@
 #define GLOGOUTPUT
 
 #ifdef GLOGOUTPUT
-#include "glog/logging.h"
+#include <glog/logging.h>
 #endif // GLOGOUTPUT
 namespace mscnav
 {

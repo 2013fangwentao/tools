@@ -30,4 +30,4 @@
 #dir
 build
 bin
-.vscode/ipch
+.vscode

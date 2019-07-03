@@ -5,7 +5,7 @@
 ** Login   <fangwentao>
 **
 ** Started on  Tue May 14 下午8:17:51 2019 little fang
-** Last update Wed Jul 2 09:25:04 2019 little fang
+** Last update Thu Jul 3 10:27:34 2019 little fang
 */
 
 #ifndef UTIL_CONFIG_H_
@@ -55,7 +55,7 @@ public:
     }
     else
     {
-      NAVERRORLOG("The key of %s does not exist, return a default value", key.c_str());
+      naverrorlog("The key of %s does not exist, return a default value", key.c_str());
       std::cout << "Press enter to continue" << std::endl;
       getchar();
       return T(0x0);
@@ -73,7 +73,7 @@ std::string ConfigInfo::get<std::string>(std::string key)
   }
   else
   {
-    NAVERRORLOG("The key of %s does not exist, return a default value", key.c_str());
+    naverrorlog("The key of %s does not exist, return a default value", key.c_str());
     std::cout << "Press enter to continue" << std::endl;
     getchar();
     return "";

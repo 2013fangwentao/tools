@@ -5,7 +5,7 @@
 ** Login   <fangwentao>
 **
 ** Started on  Mon Dec 17 下午12:56:38 2018 little fang
-** Last update Wed May 14 下午6:56:12 2019 little fang
+** Last update Thu Jul 3 13:20:08 2019 little fang
 */
 
 #include "navtime.h"
@@ -16,10 +16,10 @@ using namespace mscnav::utiltool;
 
 int main(int argc, char const *argv[])
 {
-  NAVLOGINIT(argv[0], "./log");
+  navloginit(argv[0], "./log");
   NavTime time1 = NavTime::NowTime();
   printf("%s\n", time1.Time2String().c_str());
-  NavSleep(2000);
+  navsleep(2000);
   NavTime time2 = NavTime::NowTime();
   printf("%s\n", time2.Time2String().c_str());
   printf("%s\n", time1 <= time2 ? "True" : "FALSE");
@@ -27,6 +27,6 @@ int main(int argc, char const *argv[])
   time3 += 60.0;
   NavTime time4 = time3 + NavTime::MAXSECONDOFDAY;
   navinfolog("%s", time2.Time2String().c_str());
-  NavExit();
+  navexit();
   return 0;
 }

@@ -6,11 +6,10 @@
 ** The Basic Struct of Program
 **
 ** Started on  Mon Dec 16 下午3:54:58 2018 little fang
-** Last update Wed May 14 下午7:32:48 2019 little fang
+** Last update Thu Jul 3 13:20:25 2019 little fang
 */
 #ifndef NAVSTRUCT_H_
 #define NAVSTRUCT_H_
-#include "glog/logging.h"
 #include "stdio.h"
 #include <chrono>
 #include <memory>
@@ -24,16 +23,16 @@ namespace mscnav
 namespace utiltool
 {
 
-inline void NavSleep(int _milliseconds)
+inline void navsleep(int _milliseconds)
 {
   std::chrono::milliseconds msecond(_milliseconds);
   std::this_thread::sleep_for(msecond);
 }
 
-inline void NavExit(const std::string &info = "Exitting...")
+inline void navexit(const std::string &info = "Exitting...")
 {
   printf("%s\n", info.c_str());
-  NavSleep(1000);
+  navsleep(1000);
   exit(0);
 }
 
