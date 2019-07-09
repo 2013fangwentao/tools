@@ -1,20 +1,17 @@
 /*
-** navtime.cc for MSCNAV in /media/fwt/学习/程序/myprogram/01-MSCNAV/src/util
+** navtime.cc for tools in /home/fwt/program/myprogram/wsl_program/mscnav/submodules/tools/src
 **
 ** Made by little fang
 ** Login   <fangwentao>
 **
-** Time Class, Contian: GPSTIME,COMMONTIME,DOY and so on
-**
-** Started on  Mon Dec 16 下午7:19:49 2018 little fang
-** Last update Wed Jul 2 09:01:12 2019 little fang
+** Started on  Wed Jul 3 14:35:34 2019 little fang
+** Last update Thu Jul 3 14:36:07 2019 little fang
 */
+
 #include "navtime.h"
 #include <ctime>
 #include <string.h>
 
-namespace mscnav
-{
 namespace utiltool
 {
 
@@ -405,4 +402,3 @@ void NavTime::ModifyJulianDay2Commontime()
   second_ = (mjd_.tod.sn % 3600) % 60 + mjd_.tod.tos;
 }
 } // namespace utiltool
-} // namespace mscnav

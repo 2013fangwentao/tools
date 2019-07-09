@@ -5,7 +5,7 @@
 ** Login   <fangwentao>
 **
 ** Started on  Tue May 14 下午8:17:51 2019 little fang
-** Last update Thu Jul 3 10:27:34 2019 little fang
+** Last update Thu Jul 3 14:34:20 2019 little fang
 */
 
 #ifndef UTIL_CONFIG_H_
@@ -20,8 +20,6 @@
 #include <stdio.h>
 #include <string>
 
-namespace mscnav
-{
 namespace utiltool
 {
 class ConfigInfo
@@ -80,6 +78,5 @@ std::string ConfigInfo::get<std::string>(std::string key)
   }
 }
 } // namespace utiltool
-} // namespace mscnav
 
 #endif /* !CONFIG */

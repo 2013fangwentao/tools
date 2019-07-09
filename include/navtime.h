@@ -5,7 +5,7 @@
 ** Login   <fangwentao>
 ** basic struct of time
 ** Started on  Mon Dec 16 下午7:10:38 2018 little fang
-** Last update Wed May 14 下午6:44:45 2019 little fang
+** Last update Thu Jul 3 14:35:01 2019 little fang
 */
 
 #ifndef NAVTIME_H_
@@ -15,8 +15,6 @@
 #include <string>
 #include <time.h>
 
-namespace mscnav
-{
 namespace utiltool
 {
 
@@ -114,6 +112,5 @@ private:
   MODIFYJULIANDAY mjd_;
 };
 } // namespace utiltool
-} // namespace mscnav
 
 #endif /* !NAVTIME_H_ */

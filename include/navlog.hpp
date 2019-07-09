@@ -5,7 +5,7 @@
 ** Login   <fangwentao>
 **
 ** Started on  Mon Dec 17 下午3:13:11 2018 little fang
-** Last update Thu Jul 3 13:24:52 2019 little fang
+** Last update Thu Jul 3 14:34:36 2019 little fang
 */
 
 #ifndef NAVLOG_H_
@@ -16,8 +16,7 @@
 #ifdef GLOGOUTPUT
 #include <glog/logging.h>
 #endif // GLOGOUTPUT
-namespace mscnav
-{
+
 namespace utiltool
 {
   
@@ -66,6 +65,5 @@ inline void navloginit(const char *argv, const std::string &path)
 
 } // namespace untiltool
 
-} // namespace mscnav
 
 #endif /* !NAVLOG_H_ */

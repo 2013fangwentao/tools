@@ -5,14 +5,14 @@
 ** Login   <fangwentao>
 **
 ** Started on  Mon Dec 17 下午12:56:38 2018 little fang
-** Last update Thu Jul 3 13:20:08 2019 little fang
+** Last update Thu Jul 3 15:03:41 2019 little fang
 */
 
 #include "navtime.h"
-#include "navstruct.h"
+#include "navstruct.hpp"
 #include "navlog.hpp"
 
-using namespace mscnav::utiltool;
+using namespace utiltool;
 
 int main(int argc, char const *argv[])
 {

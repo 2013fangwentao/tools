@@ -6,9 +6,6 @@
 
 using namespace std;
 
-namespace mscnav
-{
-
 namespace utiltool
 {
 
@@ -56,4 +53,3 @@ bool ConfigInfo::open(const char *config_file_path)
  */
 ConfigInfo::Ptr ConfigInfo::GetInstance() { return config_info; }
 } // namespace utiltool
-} // namespace mscnav
