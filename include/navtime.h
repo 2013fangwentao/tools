@@ -5,7 +5,7 @@
 ** Login   <fangwentao>
 ** basic struct of time
 ** Started on  Mon Dec 16 下午7:10:38 2018 little fang
-** Last update Thu Jul 3 14:35:01 2019 little fang
+** Last update Thu Jul 10 上午10:04:49 2019 little fang
 */
 
 #ifndef NAVTIME_H_

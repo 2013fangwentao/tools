@@ -5,7 +5,7 @@
 ** Login   <fangwentao>
 **
 ** Started on  Wed Jul 3 14:38:27 2019 little fang
-** Last update Wed Jul 9 18:53:02 2019 little fang
+** Last update Thu Jul 10 下午12:35:30 2019 little fang
 */
 
 #ifndef NAVSTRUCT_H_
@@ -51,7 +51,7 @@ enum GnssType
 {
   GNSSUNKOWN = -1,
   GNSSSPP,
-  GNSSPPP, 
+  GNSSPPP,
   GNSSFIXED,
   GNSSRTD
 };
@@ -59,39 +59,103 @@ enum GnssType
 class BaseData
 {
 public:
-  BaseData(const NavTime &time) : t0_(time){}
-  virtual ~BaseData(){}
+  BaseData(const NavTime &time) : t0_(time) {}
+  virtual ~BaseData() {}
 
 public:
-  using Ptr = std::shared_ptr<BaseData>;
+  using Ptr = BaseData *;
   NavTime get_time() const { return t0_; }
   DataType get_type() const { return data_type_; }
-  virtual std::string to_string();
+  virtual std::string to_string() = 0;
 
-private:
+protected:
   DataType data_type_ = DATAUNKOWN;
   NavTime t0_;
   NavTime t1_; //bak receive time
 };
 
-class GnssData: public BaseData
+class GnssData : public BaseData
 {
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-  
-public:
-  GnssData() {}
-  ~GnssData(){}
-  virtual std::string to_string()
-  {}
 
 public:
-  Eigen::Vector3d pos_{0,0,0};
-  Eigen::Vector3d vel_{0,0,0};
-  Eigen::Vector3d pos_std_{0,0,0};
-  Eigen::Vector3d vel_std_{0,0,0};
+  GnssData(const NavTime &time) : BaseData(time)
+  {
+    data_type_ = GNSSDATA;
+  }
+  virtual ~GnssData() {}
+
+public:
+  virtual std::string to_string() override
+  {
+    std::ostringstream osstream;
+    osstream << t0_.Time2String() << "\t";
+    osstream << std::fixed << std::setprecision(9) << std::setw(13) << pos_.transpose();
+    osstream << std::fixed << std::setprecision(4) << std::setw(7) << vel_.transpose();
+    osstream << std::fixed << std::setprecision(4) << std::setw(7) << pos_std_.transpose();
+    osstream << std::fixed << std::setprecision(4) << std::setw(7) << vel_std_.transpose();
+    return osstream.str();
+  }
+
+public:
+  Eigen::Vector3d pos_{0, 0, 0};
+  Eigen::Vector3d vel_{0, 0, 0};
+  Eigen::Vector3d pos_std_{0, 0, 0};
+  Eigen::Vector3d vel_std_{0, 0, 0};
   GnssType gnss_type_ = GNSSUNKOWN;
 };
+
+class ImuData : public BaseData
+{
+public:
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+
+public:
+  ImuData(const NavTime &time) : BaseData(time)
+  {
+    data_type_ = IMUDATA;
+  }
+  virtual ~ImuData() {}
+  virtual std::string to_string() override
+  {
+    std::ostringstream osstream;
+    osstream << t0_.Time2String() << "\t";
+    osstream << std::fixed << std::setprecision(6) << std::setw(14) << gyro.transpose();
+    osstream << std::fixed << std::setprecision(6) << std::setw(14) << acce.transpose();
+    return osstream.str();
+  }
+
+public:
+  Eigen::Vector3d gyro{0, 0, 0};
+  Eigen::Vector3d acce{0, 0, 0};
+};
+
+class OdoData : public BaseData
+{
+public:
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+
+public:
+  OdoData(const NavTime &time) : BaseData(time)
+  {
+    data_type_ = ODODATA;
+  }
+  virtual ~OdoData() {}
+
+public:
+  virtual std::string to_string() override
+  {
+    std::ostringstream osstream;
+    osstream << t0_.Time2String() << "\t";
+    osstream << std::fixed << std::setprecision(5) << std::setw(10) << odo_vel.transpose();
+    return osstream.str();
+  }
+
+public:
+  Eigen::Vector4d odo_vel{0, 0, 0, 0};
+};
+
 } // namespace utiltool
 
 #endif /* !NAVSTRUCT_H_ */

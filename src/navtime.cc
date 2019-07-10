@@ -5,7 +5,7 @@
 ** Login   <fangwentao>
 **
 ** Started on  Wed Jul 3 14:35:34 2019 little fang
-** Last update Thu Jul 3 14:36:07 2019 little fang
+** Last update Thu Jul 10 上午10:01:03 2019 little fang
 */
 
 #include "navtime.h"
@@ -36,7 +36,7 @@ NavTime NavTime::operator=(const NavTime &time)
 }
 
 NavTime::NavTime(int year, int month, int day, int hour, int minute, double second)
-  : year_(year), month_(month), day_(day), hour_(hour), minute_(minute), second_(second)
+    : year_(year), month_(month), day_(day), hour_(hour), minute_(minute), second_(second)
 {
   Commontime2Gpstime();
   Commontime2Doytime();
