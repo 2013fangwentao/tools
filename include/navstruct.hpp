@@ -5,7 +5,7 @@
 ** Login   <fangwentao>
 **
 ** Started on  Wed Jul 3 14:38:27 2019 little fang
-** Last update Thu Jul 10 下午12:35:30 2019 little fang
+** Last update Thu Jul 10 下午9:02:40 2019 little fang
 */
 
 #ifndef NAVSTRUCT_H_
@@ -156,6 +156,13 @@ public:
   Eigen::Vector4d odo_vel{0, 0, 0, 0};
 };
 
+// template <typename Derived>
+// inline std::string MatrixLog(const Eigen::MatrixBase<Derived> &mat, int precision = 4, int width = 10)
+// {
+//   std::ostringstream osstream;
+//   osstream << std::setprecision(precision) << std::setw(width) << mat;
+//   return osstream.str();
+// }
 } // namespace utiltool
 
 #endif /* !NAVSTRUCT_H_ */

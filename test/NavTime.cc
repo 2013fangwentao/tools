@@ -5,7 +5,7 @@
 ** Login   <fangwentao>
 **
 ** Started on  Mon Dec 17 下午12:56:38 2018 little fang
-** Last update Thu Jul 3 15:03:41 2019 little fang
+** Last update Thu Jul 10 下午8:56:38 2019 little fang
 */
 
 #include "navtime.h"
@@ -16,7 +16,6 @@ using namespace utiltool;
 
 int main(int argc, char const *argv[])
 {
-  navloginit(argv[0], "./log");
   NavTime time1 = NavTime::NowTime();
   printf("%s\n", time1.Time2String().c_str());
   navsleep(2000);
@@ -26,7 +25,6 @@ int main(int argc, char const *argv[])
   NavTime time3(2018, 12, 1, 0, 0, 0.0);
   time3 += 60.0;
   NavTime time4 = time3 + NavTime::MAXSECONDOFDAY;
-  navinfolog("%s", time2.Time2String().c_str());
   navexit();
   return 0;
 }

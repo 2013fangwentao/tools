@@ -5,7 +5,7 @@
 ** Login   <fangwentao>
 **
 ** Started on  Tue May 14 8:17:51 2019 little fang
-** Last update Thu Jul 10 ??10:04:03 2019 little fang
+** Last update Thu Jul 10 下午9:05:16 2019 little fang
 */
 
 #ifndef UTIL_CONFIG_H_
@@ -53,7 +53,8 @@ public:
     }
     else
     {
-      naverrorlog("The key of %s does not exist, return a default value", key.c_str());
+      LOG(ERROR) << "The key of " << key << " does not exist, return a default value" << std::endl;
+      std::cout << "The key of " << key << " does not exist, return a default value" << std::endl;
       std::cout << "Press enter to continue" << std::endl;
       getchar();
       return T(0x0);
@@ -71,7 +72,8 @@ std::string ConfigInfo::get<std::string>(std::string key)
   }
   else
   {
-    naverrorlog("The key of %s does not exist, return a default value", key.c_str());
+    LOG(ERROR) << "The key of " << key << " does not exist, return a default value" << std::endl;
+    std::cout << "The key of " << key << " does not exist, return a default value" << std::endl;
     std::cout << "Press enter to continue" << std::endl;
     getchar();
     return "";
