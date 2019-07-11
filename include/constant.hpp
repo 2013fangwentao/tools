@@ -12,49 +12,38 @@
 #define CONSTANT_H_
 #include <cmath>
 
-namespace constant
+namespace utiltool
 {
 
-constexpr double WGS84_RE = 6378137.0;
+namespace constant
+{
+constexpr double WGS84_A = 6378137.0;
 constexpr double WGS84_F = (1.0 / 298.257223563);
+constexpr double WGS84_AngleRate(7.2921151467E-5);
+constexpr double WGS84_GM(3.986005e14);
 
-// constexpr double constant_wie = 7.2921151467e-5;
-// constexpr double constant_meru = constant_wie / 1000;
-// constexpr double constant_g0 = 9.7803267714;
-// constexpr double constant_mg = 1e-3 * constant_g0;
-// constexpr double constant_ug = 1e-3 * constant_mg;
-// constexpr double constant_mGal = 1e-3 * 0.01; // milli Gal = 1cm/s^2 ~= 1.0E-6*g0
-// constexpr double constant_ugpg2 = constant_ug / constant_g0 / constant_g0;
-// constexpr double constant_ppm = 1e-6;
-// constexpr double constant_deg = M_PI / 180;        // arcdeg
-// constexpr double constant_min = constant_deg / 60; // arcmin
-// constexpr double constant_sec = constant_min / 60; // arcsec
-// constexpr double constant_hur = 3600;
-// constexpr double constant_dps = constant_deg / 1;                   // arcdeg / second
-// constexpr double constant_dph = constant_deg / constant_hur;        // arcdeg / hour
-// constexpr double constant_dpss = constant_deg / sqrt(1.0);          // arcdeg / sqrt(second)
-// constexpr double constant_dpsh = constant_deg / sqrt(constant_hur); // arcdeg / sqrt(hour)
-// constexpr double constant_dphpsh = constant_dph / sqrt(constant_hur);
-// constexpr double constant_Hz = 1 / 1; // Hertz
-// constexpr double constant_dphpsHz = constant_dph / constant_Hz;
-// constexpr double constant_mgpsHz = constant_mg / sqrt(constant_Hz);
-// constexpr double constant_ugpsHz = constant_ug / sqrt(constant_Hz);
-// constexpr double constant_ugpsh = constant_ug / sqrt(constant_hur); // ug / sqrt(hour)
-// constexpr double constant_mpsh = 1 / 1 / sqrt(constant_hur);
-// constexpr double constant_ppmpsh = constant_ppm / sqrt(constant_hur);
-// constexpr double constant_mil = 2 * M_PI / 6000;
-// constexpr double constant_nm = 1853;                       // nautical mile
-// constexpr double constant_kn = constant_nm / constant_hur; // 海里每小时
-// // added
-// constexpr double constant_mps = 1 / 1;
-// constexpr double constant_km = 1000;
-// constexpr double constant_kmph = constant_km / constant_hur;
-// constexpr double constant_mpr = 1 / WGS84_RE;
-// constexpr double constant_m = 1.0;
-// constexpr double constant_cm = constant_m / 100; // cm
+constexpr double constant_wie = 7.2921151467e-5;
+constexpr double constant_g0 = 9.7803267715;
+constexpr double constant_mg = 1e-3 * constant_g0;
+constexpr double constant_ug = 1e-3 * constant_mg;
+constexpr double constant_mGal = 1e-6 * constant_g0; // milli Gal = 1cm/s^2 ~= 1.0E-6*g0
+constexpr double constant_ppm = 1e-6;
+constexpr double constant_hour = 3600;
+constexpr double constant_e_5(1.0e-5);
+constexpr double constant_e_6(1.0e-6);
+constexpr double constant_e5(1.0e5);
+constexpr double constant_e6(1.0e6);
+constexpr double constant_J2(0.00108263);
+constexpr double constant_J4(-2.37091222e-6);
+constexpr double constant_J6(6.08347e-9);
+
+constexpr double rad2deg = M_PI / 180;
+constexpr double deg2rad = 180 / M_PI;
+constexpr double dh2rs(M_PI / 180.0 / 3600.0);
+constexpr double rs2dh(180.0 / M_PI * 3600.0);
 
 constexpr double operator"" _deg(long double x) { return x / 180 * M_PI; }
 
 } // namespace constant
-
+} // namespace utiltool
 #endif /* !CONSTANT_H_ */

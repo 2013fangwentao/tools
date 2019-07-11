@@ -11,13 +11,14 @@
 #include "navattitude.hpp"
 #include "navlog.hpp"
 #include "navstruct.hpp"
-#include "glog/logging.h"
+#include "navearth.hpp"
 #include <sstream>
 #include <fstream>
 #include <iomanip>
 
 using namespace utiltool;
 using namespace attitude;
+using namespace utiltool::constant;
 
 void test(const Euler &euler)
 {
@@ -62,6 +63,7 @@ void test1()
                << "Euler from m " << std::endl
                << RotationMartix2Euler(m) << std::endl
                << std::endl;
+    LOG(ERROR) << earth::CalculateGravity({30 * deg2rad, 114 * deg2rad, 80},false) << std::endl;
 }
 
 int main(int argc, const char **argv)
@@ -82,7 +84,7 @@ int main(int argc, const char **argv)
         auto data = TextSplit(line, "\\s+");
         Euler euler(stod(data[0]), stod(data[1]), stod(data[2]));
         euler += Euler{M_PI * 2, M_PI * 2, M_PI * 2} * index;
-        test(euler);
+        // test(euler);
     }
 
     return 0;

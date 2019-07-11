@@ -31,4 +31,7 @@
 build
 bin
 .vscode
+
+# log & data
 *.log
+data
