@@ -11,6 +11,7 @@
 #ifndef NAVATTITUDE_H_
 #define NAVATTITUDE_H_
 #include "stdio.h"
+#include "navbase.hpp"
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
 
@@ -18,7 +19,7 @@ namespace utiltool
 {
 
 using RotationVector = Eigen::Vector3d;
-using Euler = Eigen::Vector3d; /* roll, pitch, heading */
+using Euler = Eigen::Vector3d; /*roll, pitch, heading*/
 
 namespace attitude
 {
@@ -55,9 +56,9 @@ Eigen::Quaterniond RotationMartix2Quaternion(const Eigen::Matrix3d &mat)
 Eigen::Quaterniond Euler2Quaternion(const Euler &euler)
 {
     //TODO need check the order
-    return (Eigen::AngleAxisd(euler[0], Eigen::Vector3d::UnitZ()) *
+    return (Eigen::AngleAxisd(euler[2], Eigen::Vector3d::UnitZ()) *
             Eigen::AngleAxisd(euler[1], Eigen::Vector3d::UnitY()) *
-            Eigen::AngleAxisd(euler[2], Eigen::Vector3d::UnitX()));
+            Eigen::AngleAxisd(euler[0], Eigen::Vector3d::UnitX()));
 }
 
 /**
@@ -80,7 +81,7 @@ Eigen::Matrix3d Euler2RotationMatrix(const Euler &euler)
 Euler RotationMartix2Euler(const Eigen::Matrix3d &mat)
 {
     // TODO need to check the order of the axis coincide with roll>pitch>heading/yaw
-    return mat.eulerAngles(2, 1, 0);
+    return eulerAngles(mat);
 }
 
 /**

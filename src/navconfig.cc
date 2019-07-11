@@ -27,7 +27,7 @@ bool ConfigInfo::open(const char *config_file_path)
   }
   while (!ifs_in.eof())
   {
-    string line, key, value;
+    string line, key;
     getline(ifs_in, line);
     if (line.size() == 0)
     {
@@ -37,11 +37,11 @@ bool ConfigInfo::open(const char *config_file_path)
     {
       continue;
     }
-    stringstream sstr_line(line);
+    auto data = TextSplit(line, ":");
+    key = data[0];
     transform(key.begin(), key.end(), key.begin(), ::tolower);
-    sstr_line >> key;
-    sstr_line >> value;
-    storage[key] = value;
+    if (data.size() > 1)
+      storage[key] = data[1];
   }
   return true;
 }

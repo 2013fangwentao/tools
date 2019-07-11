@@ -5,13 +5,14 @@
 ** Login   <fangwentao>
 **
 ** Started on  Tue May 14 8:17:51 2019 little fang
-** Last update Thu Jul 10 下午9:05:16 2019 little fang
+** Last update Fri Jul 11 上午8:29:08 2019 little fang
 */
 
 #ifndef UTIL_CONFIG_H_
 #define UTIL_CONFIG_H_
 
 #include "navlog.hpp"
+#include "navbase.hpp"
 #include <algorithm>
 #include <iostream>
 #include <map>
@@ -19,6 +20,9 @@
 #include <sstream>
 #include <stdio.h>
 #include <string>
+#include <regex>
+#include <vector>
+#include <exception>
 
 namespace utiltool
 {
@@ -48,8 +52,15 @@ public:
     transform(key.begin(), key.end(), key.begin(), ::tolower);
     if (storage.count(key) > 0)
     {
-      double value = stod(storage[key]);
-      return static_cast<T>(value);
+      try
+      {
+        double value = stod(storage[key]);
+        return static_cast<T>(value);
+      }
+      catch (const std::exception &e)
+      {
+        std::cerr << e.what() << '\n';
+      }
     }
     else
     {
@@ -60,6 +71,36 @@ public:
       return T(0x0);
     }
   }
+  template <typename T>
+  std::vector<T> get_array(std::string key)
+  {
+    std::vector<T> data;
+    transform(key.begin(), key.end(), key.begin(), ::tolower);
+    if (storage.count(key) > 0)
+    {
+      try
+      {
+        auto text = TextSplit(storage[key], ",");
+        for (auto index : text)
+        {
+          double value = stod(index);
+          data.push_back(static_cast<T>(value));
+        }
+      }
+      catch (const std::exception &e)
+      {
+        std::cerr << e.what() << '\n';
+      }
+    }
+    else
+    {
+      LOG(ERROR) << "The key of " << key << " does not exist, return a default value" << std::endl;
+      std::cout << "The key of " << key << " does not exist, return a default value" << std::endl;
+      std::cout << "Press enter to continue" << std::endl;
+      getchar();
+    }
+    return data;
+  }
 };
 
 template <>
@@ -68,7 +109,14 @@ std::string ConfigInfo::get<std::string>(std::string key)
   transform(key.begin(), key.end(), key.begin(), ::tolower);
   if (storage.count(key) > 0)
   {
-    return (storage[key]);
+    try
+    {
+      return (storage[key]);
+    }
+    catch (const std::exception &e)
+    {
+      std::cerr << e.what() << '\n';
+    }
   }
   else
   {
@@ -79,6 +127,33 @@ std::string ConfigInfo::get<std::string>(std::string key)
     return "";
   }
 }
+
+template <>
+std::vector<std::string> ConfigInfo::get_array<std::string>(std::string key)
+{
+  std::vector<std::string> data;
+  transform(key.begin(), key.end(), key.begin(), ::tolower);
+  if (storage.count(key) > 0)
+  {
+    try
+    {
+      data = TextSplit(storage[key], ",");
+    }
+    catch (const std::exception &e)
+    {
+      std::cerr << e.what() << '\n';
+    }
+  }
+  else
+  {
+    LOG(ERROR) << "The key of " << key << " does not exist, return a default value" << std::endl;
+    std::cout << "The key of " << key << " does not exist, return a default value" << std::endl;
+    std::cout << "Press enter to continue" << std::endl;
+    getchar();
+  }
+  return data;
+}
+
 } // namespace utiltool
 
 #endif /* !CONFIG */

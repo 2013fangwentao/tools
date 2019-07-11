@@ -12,20 +12,78 @@
 #include "navlog.hpp"
 #include "navstruct.hpp"
 #include "glog/logging.h"
+#include <sstream>
+#include <fstream>
 #include <iomanip>
 
 using namespace utiltool;
+using namespace attitude;
+
+void test(const Euler &euler)
+{
+    std::ostringstream osstr;
+    osstr << std::fixed << std::setprecision(12) << "raw " << euler.transpose();
+    auto q = Euler2Quaternion(euler);
+    auto m = Euler2RotationMatrix(euler);
+    osstr << std::fixed << std::setprecision(12) << " q " << (Quaternion2Euler(q)).transpose();
+    osstr << std::fixed << std::setprecision(12) << " q_diff " << (Quaternion2Euler(q) - euler).transpose();
+    osstr << std::fixed << std::setprecision(12) << " m " << (RotationMartix2Euler(m)).transpose();
+    osstr << std::fixed << std::setprecision(12) << " m_diff " << (RotationMartix2Euler(m) - euler).transpose();
+    LOG(ERROR) << osstr.str() << std::endl;
+    return;
+}
+
+void test1()
+{
+    Euler euler{0.5, 1.5, 1.2};
+    auto q = Euler2Quaternion(euler);
+    auto m = Euler2RotationMatrix(euler);
+    LOG(ERROR) << std::fixed << std::setprecision(16) << std::endl
+               << "Quaternion " << std::endl
+               << euler << std::endl
+               << std::endl;
+
+    LOG(ERROR) << std::fixed << std::setprecision(16) << std::endl
+               << "Quaternion " << std::endl
+               << q.coeffs() << std::endl
+               << std::endl;
+
+    LOG(ERROR) << std::fixed << std::setprecision(16) << std::endl
+               << "Matrix " << std::endl
+               << m << std::endl
+               << std::endl;
+
+    LOG(ERROR) << std::fixed << std::setprecision(16) << std::endl
+               << "Euler from q " << std::endl
+               << Quaternion2Euler(q) << std::endl
+               << std::endl;
+
+    LOG(ERROR) << std::fixed << std::setprecision(16) << std::endl
+               << "Euler from m " << std::endl
+               << RotationMartix2Euler(m) << std::endl
+               << std::endl;
+}
 
 int main(int argc, const char **argv)
 {
     LogInit(argv[0], "./log/", google::INFO);
-    RotationVector rv{0.25, 0.3, 0.4};
-    auto rotation_mat = attitude::RotationVector2RotationMatrix(rv);
-    auto euler = attitude::RotationMartix2Euler(rotation_mat);
-    auto rotation_mat2 = attitude::Euler2RotationMatrix(euler);
-    LOG(INFO) << "mat2 " << std::setprecision(10) << std::endl
-              << rotation_mat2;
-    LOG(WARNING) << "mat " << std::setprecision(10) << std::endl
-                 << rotation_mat;
+    test1();
+    std::ifstream ifs_attlog(argv[1]);
+    if (!ifs_attlog.good())
+    {
+        LOG(FATAL) << "file error";
+    }
+    int index = 1;
+    while (!ifs_attlog.eof())
+    {
+        index *= -1;
+        std::string line;
+        std::getline(ifs_attlog, line);
+        auto data = TextSplit(line, "\\s+");
+        Euler euler(stod(data[0]), stod(data[1]), stod(data[2]));
+        euler += Euler{M_PI * 2, M_PI * 2, M_PI * 2} * index;
+        test(euler);
+    }
+
     return 0;
 }
