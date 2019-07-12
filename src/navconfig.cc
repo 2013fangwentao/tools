@@ -33,7 +33,7 @@ bool ConfigInfo::open(const char *config_file_path)
     {
       continue;
     }
-    else if (line.substr(0, 1) == "#" || line.substr(0, 1) == "*")
+    else if (line.substr(0, 1) == "#" || line.substr(0, 1) == "*" || line.substr(0, 1) == "!")
     {
       continue;
     }
