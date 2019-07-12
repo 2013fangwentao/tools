@@ -5,7 +5,7 @@
 ** Login   <fangwentao>
 **
 ** Started on  Wed Jul 3 14:38:27 2019 little fang
-** Last update Thu Jul 10 下午9:02:40 2019 little fang
+** Last update Sat Jul 12 上午9:42:48 2019 little fang
 */
 
 #ifndef NAVSTRUCT_H_
@@ -44,7 +44,8 @@ enum DataType
   IMUDATA,
   GNSSDATA,
   ODODATA,
-  FEATUREDATA
+  FEATUREDATA,
+  RESULTDATA
 };
 
 enum GnssType
@@ -53,7 +54,8 @@ enum GnssType
   GNSSSPP,
   GNSSPPP,
   GNSSFIXED,
-  GNSSRTD
+  GNSSRTD,
+  GNSSRAW
 };
 
 class BaseData
@@ -156,13 +158,24 @@ public:
   Eigen::Vector4d odo_vel{0, 0, 0, 0};
 };
 
-// template <typename Derived>
-// inline std::string MatrixLog(const Eigen::MatrixBase<Derived> &mat, int precision = 4, int width = 10)
-// {
-//   std::ostringstream osstream;
-//   osstream << std::setprecision(precision) << std::setw(width) << mat;
-//   return osstream.str();
-// }
+struct NavResultInfo
+{
+  NavTime time_;
+  Eigen::Vector3d pos_{0, 0, 0};
+  Eigen::Vector3d vel_{0, 0, 0};
+  Eigen::Vector3d att_{0, 0, 0};
+  Eigen::Vector3d wibb_{0, 0, 0};
+  Eigen::Vector3d fibb_{0, 0, 0};
+  Eigen::Vector3d pos_std_{0, 0, 0};
+  Eigen::Vector3d vel_std_{0, 0, 0};
+  Eigen::Vector3d att_std_{0, 0, 0};
+  Eigen::Vector3d gyro_bias_{0, 0, 0};
+  Eigen::Vector3d acce_bias_{0, 0, 0};
+  Eigen::Vector3d gyro_scale_{0, 0, 0};
+  Eigen::Vector3d acce_scale_{0, 0, 0};
+  long long int result_type_;
+};
+
 } // namespace utiltool
 
 #endif /* !NAVSTRUCT_H_ */

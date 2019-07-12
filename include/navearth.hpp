@@ -5,7 +5,7 @@
 ** Login   <fangwentao>
 **
 ** Started on  Thu Jul 11 下午7:17:43 2019 little fang
-** Last update Thu Jul 11 下午7:17:43 2019 little fang
+** Last update Sun Jul 13 上午6:26:32 2019 little fang
 */
 
 #ifndef UTIL_EARTH_H_
@@ -72,6 +72,135 @@ Vector3d CalculateGravity(const Vector3d &pos, bool IsECEF = true)
         Vector3d gn_vec{0, 0, gn};
         return gn_vec;
     }
+}
+
+/**
+  * @brief  BLH coordinate convert to rectangle XYZ in WGS84 coordinate
+  * @note   
+  * @param  &BLH: [rad rad m]
+  * @retval 
+  */
+Eigen::Vector3d WGS84BLH2XYZ(const Eigen::Vector3d &BLH)
+{
+    Eigen::Vector3d XYZ{0, 0, 0};
+    double W84, N84, m_A84, m_B84, m_E84;
+
+    m_A84 = 6378137.0;
+    m_B84 = 6378137.0 * 297.257223563 / 298.257223563;
+    m_E84 = (1.0 - m_B84 * m_B84 / m_A84 / m_A84);
+    W84 = sqrt(1.00 - m_E84 * sin(BLH(0)) * sin(BLH(0)));
+    N84 = m_A84 / W84;
+
+    XYZ(0) = (N84 + BLH(2)) * cos(BLH(0)) * cos(BLH(1));
+    XYZ(1) = (N84 + BLH(2)) * cos(BLH(0)) * sin(BLH(1));
+    XYZ(2) = (N84 * (1 - m_E84) + BLH(2)) * sin(BLH(0));
+
+    return XYZ;
+}
+
+/**
+  * @brief  XYZ coordinate convert to BLH in WGS84 coordinate
+  * @note   
+  * @param  &XYZ: [m,m,m]
+  * @retval 
+  */
+Eigen::Vector3d WGS84XYZ2BLH(const Eigen::Vector3d &XYZ)
+{
+    Eigen::Vector3d BLH;
+    double a = 6378137.0;
+    double b = 6378137.0 * 297.257223563 / 298.257223563;
+    double e2 = (1.0 - b * b / a / a);
+    double N;
+    double p;
+    double dtmp;
+    double sinlat;
+    double lat;
+    double lon;
+    double hgt;
+
+    if (XYZ(0) == 0.0 && XYZ(1) == 0.0)
+    {
+        lon = 0.0;
+        if (XYZ(2) < 0)
+        {
+            hgt = -XYZ(2) - b;
+            lat = -M_PI / 2.0;
+        }
+        else
+        {
+            hgt = XYZ(2) - b;
+            lat = M_PI / 2.0;
+        }
+    }
+    else
+    {
+        p = sqrt(XYZ(0) * XYZ(0) + XYZ(1) * XYZ(1));
+
+        lon = 2.0 * atan2(XYZ(1), (XYZ(0) + p));
+        lat = atan(XYZ(2) / (p * (1.0 - e2)));
+        hgt = 0.0;
+        do
+        {
+            dtmp = hgt;
+            sinlat = sin(lat);
+            N = a / sqrt(1.0 - e2 * sinlat * sinlat);
+            hgt = p / cos(lat) - N;
+            lat = atan(XYZ(2) / (p * (1.0 - e2 * N / (N + hgt))));
+        } while (fabs(hgt - dtmp) > 0.0001);
+    }
+
+    BLH(0) = lat;
+    BLH(1) = lon;
+    BLH(2) = hgt;
+    return BLH;
+}
+
+/**
+ * @brief  calculate the rotation matrix of n coordinate to ecef
+ * @note   
+ * @param  B: 
+ * @param  L: 
+ * @retval 
+ */
+Eigen::Matrix3d CalCn2e(double B, double L)
+{
+    Eigen::Matrix3d Cne;
+    Cne(0, 0) = -sin(B) * cos(L);
+    Cne(0, 1) = -sin(L);
+    Cne(0, 2) = -cos(B) * cos(L);
+
+    Cne(1, 0) = -sin(B) * sin(L);
+    Cne(1, 1) = cos(L);
+    Cne(1, 2) = -cos(B) * sin(L);
+
+    Cne(2, 0) = cos(B);
+    Cne(2, 1) = 0;
+    Cne(2, 2) = -sin(B);
+    return Cne;
+}
+
+/**
+ * @brief  calculate the rotation matrix of ecef coordinate to navigation(local coordinate)
+ * @note   
+ * @param  B: 
+ * @param  L: 
+ * @retval 
+ */
+Eigen::Matrix3d CalCe2n(double B, double L)
+{
+    Eigen::Matrix3d Cne;
+    Cne(0, 0) = -sin(B) * cos(L);
+    Cne(0, 1) = -sin(B) * sin(L);
+    Cne(0, 2) = cos(B);
+
+    Cne(1, 0) = -sin(L);
+    Cne(1, 1) = cos(L);
+    Cne(1, 2) = 0;
+
+    Cne(2, 0) = -cos(B) * cos(L);
+    Cne(2, 1) = -cos(B) * sin(L);
+    Cne(2, 2) = -sin(B);
+    return Cne;
 }
 
 } // namespace earth

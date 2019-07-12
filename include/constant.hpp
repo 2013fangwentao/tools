@@ -5,7 +5,7 @@
 ** Login   <fangwentao>
 **
 ** Started on  Wed Jul 10 下午9:46:55 2019 little fang
-** Last update Thu Jul 10 下午9:53:31 2019 little fang
+** Last update Sat Jul 12 上午8:41:23 2019 little fang
 */
 
 #ifndef CONSTANT_H_
@@ -43,6 +43,11 @@ constexpr double dh2rs(M_PI / 180.0 / 3600.0);
 constexpr double rs2dh(180.0 / M_PI * 3600.0);
 
 constexpr double operator"" _deg(long double x) { return x / 180 * M_PI; }
+constexpr double operator"" _hour(long double x) { return x * constant_hour; }
+constexpr double operator"" _mGal(long double x) { return x * constant_mGal; }
+constexpr double operator"" _g(long double x) { return x * constant_g0; }
+constexpr double operator"" _ppm(long double x) { return x * constant_ppm; }
+constexpr double operator"" _dh(long double x) { return x * dh2rs; } //deg/h
 
 } // namespace constant
 } // namespace utiltool

@@ -5,7 +5,7 @@
 ** Login   <fangwentao>
 **
 ** Started on  Wed Jul 10 下午12:39:42 2019 little fang
-** Last update Thu Jul 10 下午9:39:48 2019 little fang
+** Last update Sun Jul 13 上午6:30:36 2019 little fang
 */
 
 #ifndef NAVATTITUDE_H_
@@ -18,11 +18,12 @@
 namespace utiltool
 {
 
-using RotationVector = Eigen::Vector3d;
-using Euler = Eigen::Vector3d; /*roll, pitch, heading*/
 
 namespace attitude
 {
+
+using RotationVector = Eigen::Vector3d;
+using Euler = Eigen::Vector3d; /*roll, pitch, heading*/
 
 /**
  * @brief  quaternion to rotation martrix by Eigen
@@ -56,6 +57,7 @@ Eigen::Quaterniond RotationMartix2Quaternion(const Eigen::Matrix3d &mat)
 Eigen::Quaterniond Euler2Quaternion(const Euler &euler)
 {
     //TODO need check the order
+    //DONE check by little fang in 20190712
     return (Eigen::AngleAxisd(euler[2], Eigen::Vector3d::UnitZ()) *
             Eigen::AngleAxisd(euler[1], Eigen::Vector3d::UnitY()) *
             Eigen::AngleAxisd(euler[0], Eigen::Vector3d::UnitX()));
@@ -81,6 +83,7 @@ Eigen::Matrix3d Euler2RotationMatrix(const Euler &euler)
 Euler RotationMartix2Euler(const Eigen::Matrix3d &mat)
 {
     // TODO need to check the order of the axis coincide with roll>pitch>heading/yaw
+    // DONE check by little fang. writed by ourselies, do not use Eigen.
     return eulerAngles(mat);
 }
 

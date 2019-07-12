@@ -1,16 +1,7 @@
-/*
-** navtime.cc for tools in /home/fwt/program/myprogram/wsl_program/mscnav/submodules/tools/src
-**
-** Made by little fang
-** Login   <fangwentao>
-**
-** Started on  Wed Jul 3 14:35:34 2019 little fang
-** Last update Thu Jul 10 上午10:01:03 2019 little fang
-*/
-
 #include "navtime.h"
 #include <ctime>
 #include <string.h>
+
 
 namespace utiltool
 {

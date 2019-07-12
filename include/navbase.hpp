@@ -5,7 +5,7 @@
 ** Login   <fangwentao>
 **
 ** Started on  Thu Jul 11 上午9:11:49 2019 little fang
-** Last update Thu Jul 11 上午9:11:49 2019 little fang
+** Last update Sun Jul 13 上午6:30:40 2019 little fang
 */
 
 #ifndef UTIL_BASE_H_
@@ -16,6 +16,8 @@
 #include <exception>
 #include <iostream>
 #include <Eigen/Dense>
+
+#include "navstruct.hpp"
 
 namespace utiltool
 {
@@ -58,6 +60,37 @@ std::ostream &operator<<(std::ostream &output, const std::vector<T> &data)
     return output;
 }
 
+/**
+ * @brief  override the ostream output NavResultInfo
+ * @note   
+ * @param  &output: ostream& 
+ * @param  nav_res_info: 
+ * @retval 
+ */
+std::ostream &operator<<(std::ostream &output, const NavResultInfo& nav_res_info)
+{
+    output << nav_res_info.time_.Time2String() << " " << nav_res_info.time_.Time2String("%d %.1f", NavTime::GPSTIME) << "\t";
+    output << nav_res_info.pos_.transpose() << "\t";
+    output << nav_res_info.vel_.transpose() << "\t";
+    output << nav_res_info.att_.transpose() << "\t";
+    output << nav_res_info.pos_std_.transpose() << "\t";
+    output << nav_res_info.vel_std_.transpose() << "\t";
+    output << nav_res_info.att_std_.transpose() << "\t";
+    output << nav_res_info.gyro_bias_.transpose() << "\t";
+    output << nav_res_info.acce_bias_.transpose() << "\t";
+    output << nav_res_info.gyro_scale_.transpose() << "\t";
+    output << nav_res_info.acce_scale_.transpose();
+    return output;
+}
+
+/**
+  * @brief  calculate the euler from Rotation Matrix 
+  * @note   reference the Eigen::Matrix::eulerAngles 
+  * @note   roll [-pi/2~pi/2], pitch[-pi/2~pi/2], heading/yaw[-pi~pi]
+  * @param  Eigen::Matrix<Derived:  the vector of euler by order roll -> pitch -> heading/yaw
+  * @param  &coeff: Rotation Matrix
+  * @retval 
+  */
 template <typename Derived>
 inline Eigen::Matrix<Derived, 3, 1> eulerAngles(const Eigen::Matrix<Derived, 3, 3> &coeff)
 {
@@ -80,6 +113,29 @@ inline Eigen::Matrix<Derived, 3, 1> eulerAngles(const Eigen::Matrix<Derived, 3, 
     res[0] = atan2(s1 * coeff(k, i) - c1 * coeff(j, i), c1 * coeff(j, j) - s1 * coeff(k, j));
 
     return res;
+}
+/**
+ * @brief  skew matrix from vector
+ * @note   
+ * @param  vector: 
+ * @retval 
+ */
+Eigen::Matrix3d skew(Eigen::Vector3d &vector)
+{
+    Eigen::Matrix3d dcm1;
+    dcm1(0, 0) = 0;
+    dcm1(0, 1) = -vector(2);
+    dcm1(0, 2) = vector(1);
+
+    dcm1(1, 0) = vector(2);
+    dcm1(1, 1) = 0;
+    dcm1(1, 2) = -vector(0);
+
+    dcm1(2, 0) = -vector(1);
+    dcm1(2, 1) = vector(0);
+    dcm1(2, 2) = 0;
+
+    return dcm1;
 }
 
 } // namespace utiltool
