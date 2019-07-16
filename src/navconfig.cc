@@ -38,10 +38,10 @@ bool ConfigInfo::open(const char *config_file_path)
       continue;
     }
     auto data = TextSplit(line, ":");
-    key = data[0];
+    key = trim(data[0]);
     transform(key.begin(), key.end(), key.begin(), ::tolower);
     if (data.size() > 1)
-      storage[key] = data[1];
+      storage[key] = trim(data[1]);
   }
   return true;
 }

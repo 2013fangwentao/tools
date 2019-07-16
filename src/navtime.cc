@@ -190,6 +190,13 @@ NavTime NavTime::operator-(double second)
 }
 NavTime NavTime::operator-(int second) { return operator-((double)second); }
 
+double NavTime::operator-(const NavTime& time)
+{
+  int diffweek = gpsweek_ - time.GpsWeek();
+  double diffsecond = second_of_week_ - time.SecondOfWeek();
+  return (diffweek * 86400 * 7 + diffsecond);
+}
+
 /**
  * @brief  compare two Navtime with <
  * @note
