@@ -5,7 +5,7 @@
 ** Login   <fangwentao>
 **
 ** Started on  Tue May 14 8:17:51 2019 little fang
-** Last update Fri Jul 11 上午8:29:08 2019 little fang
+** Last update Sun Jul 13 ??2:52:19 2019 little fang
 */
 
 #ifndef UTIL_CONFIG_H_
@@ -111,7 +111,7 @@ std::string ConfigInfo::get<std::string>(std::string key)
   {
     try
     {
-      return (storage[key]);
+      return std::string(storage[key]);
     }
     catch (const std::exception &e)
     {

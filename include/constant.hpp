@@ -5,7 +5,7 @@
 ** Login   <fangwentao>
 **
 ** Started on  Wed Jul 10 下午9:46:55 2019 little fang
-** Last update Sat Jul 12 上午8:41:23 2019 little fang
+** Last update Thu Jul 17 下午5:49:08 2019 little fang
 */
 
 #ifndef CONSTANT_H_
@@ -37,8 +37,8 @@ constexpr double constant_J2(0.00108263);
 constexpr double constant_J4(-2.37091222e-6);
 constexpr double constant_J6(6.08347e-9);
 
-constexpr double rad2deg = M_PI / 180;
-constexpr double deg2rad = 180 / M_PI;
+constexpr double deg2rad = M_PI / 180;
+constexpr double rad2deg = 180 / M_PI;
 constexpr double dh2rs(M_PI / 180.0 / 3600.0);
 constexpr double rs2dh(180.0 / M_PI * 3600.0);
 

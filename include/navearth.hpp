@@ -203,6 +203,8 @@ Eigen::Matrix3d CalCe2n(double B, double L)
     return Cne;
 }
 
+inline Eigen::Vector3d wiee() { return Eigen::Vector3d(0, 0, WGS84_AngleRate); }
+
 } // namespace earth
 } // namespace utiltool
 

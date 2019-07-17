@@ -5,7 +5,7 @@
 ** Login   <fangwentao>
 **
 ** Started on  Thu Jul 11 上午9:11:49 2019 little fang
-** Last update Sun Jul 13 上午6:30:40 2019 little fang
+** Last update Thu Jul 17 下午5:57:33 2019 little fang
 */
 
 #ifndef UTIL_BASE_H_
@@ -18,6 +18,7 @@
 #include <Eigen/Dense>
 
 #include "navstruct.hpp"
+#include "constant.hpp"
 
 namespace utiltool
 {
@@ -43,6 +44,17 @@ std::vector<std::string> TextSplit(const std::string &in, const std::string &del
     return ret;
 }
 
+std::string &trim(std::string &s)
+{
+    if (s.empty())
+    {
+        return s;
+    }
+    s.erase(0, s.find_first_not_of(" "));
+    s.erase(s.find_last_not_of(" ") + 1);
+    return s;
+}
+
 /**
   * @brief  override the ostream output vector<T>
   * @note   
@@ -51,7 +63,8 @@ std::vector<std::string> TextSplit(const std::string &in, const std::string &del
   * @retval 
   */
 template <typename T>
-std::ostream &operator<<(std::ostream &output, const std::vector<T> &data)
+std::ostream &
+operator<<(std::ostream &output, const std::vector<T> &data)
 {
     for (auto index : data)
     {
@@ -60,6 +73,11 @@ std::ostream &operator<<(std::ostream &output, const std::vector<T> &data)
     return output;
 }
 
+std::ostream &operator<<(std::ostream &output, const NavTime &time)
+{
+    output << time.Time2String() << " " << time.Time2String("%d %10.3f", NavTime::GPSTIME) << "\t";
+    return output;
+}
 /**
  * @brief  override the ostream output NavResultInfo
  * @note   
@@ -67,19 +85,19 @@ std::ostream &operator<<(std::ostream &output, const std::vector<T> &data)
  * @param  nav_res_info: 
  * @retval 
  */
-std::ostream &operator<<(std::ostream &output, const NavResultInfo& nav_res_info)
+std::ostream &operator<<(std::ostream &output, const NavInfo &nav_info)
 {
-    output << nav_res_info.time_.Time2String() << " " << nav_res_info.time_.Time2String("%d %.1f", NavTime::GPSTIME) << "\t";
-    output << nav_res_info.pos_.transpose() << "\t";
-    output << nav_res_info.vel_.transpose() << "\t";
-    output << nav_res_info.att_.transpose() << "\t";
-    output << nav_res_info.pos_std_.transpose() << "\t";
-    output << nav_res_info.vel_std_.transpose() << "\t";
-    output << nav_res_info.att_std_.transpose() << "\t";
-    output << nav_res_info.gyro_bias_.transpose() << "\t";
-    output << nav_res_info.acce_bias_.transpose() << "\t";
-    output << nav_res_info.gyro_scale_.transpose() << "\t";
-    output << nav_res_info.acce_scale_.transpose();
+    output << nav_info.time_ << "\t";
+    output << nav_info.pos_.transpose() << "\t";
+    output << nav_info.vel_.transpose() << "\t";
+    output << nav_info.att_.transpose() * constant::rad2deg << "\t";
+    output << nav_info.pos_std_.transpose() << "\t";
+    output << nav_info.vel_std_.transpose() << "\t";
+    output << nav_info.att_std_.transpose() << "\t";
+    output << nav_info.gyro_bias_.transpose() << "\t";
+    output << nav_info.acce_bias_.transpose() << "\t";
+    output << nav_info.gyro_scale_.transpose() << "\t";
+    output << nav_info.acce_scale_.transpose();
     return output;
 }
 
@@ -120,7 +138,7 @@ inline Eigen::Matrix<Derived, 3, 1> eulerAngles(const Eigen::Matrix<Derived, 3, 
  * @param  vector: 
  * @retval 
  */
-Eigen::Matrix3d skew(Eigen::Vector3d &vector)
+Eigen::Matrix3d skew(const Eigen::Vector3d &vector)
 {
     Eigen::Matrix3d dcm1;
     dcm1(0, 0) = 0;

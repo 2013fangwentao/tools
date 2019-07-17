@@ -5,7 +5,7 @@
 ** Login   <fangwentao>
 **
 ** Started on  Wed Jul 3 14:38:27 2019 little fang
-** Last update Sat Jul 12 上午9:42:48 2019 little fang
+** Last update Wed Jul 16 下午10:54:58 2019 little fang
 */
 
 #ifndef NAVSTRUCT_H_
@@ -62,11 +62,13 @@ class BaseData
 {
 public:
   BaseData(const NavTime &time) : t0_(time) {}
+  BaseData() {}
   virtual ~BaseData() {}
 
 public:
   using Ptr = BaseData *;
   NavTime get_time() const { return t0_; }
+  NavTime set_time(const NavTime &time) { t0_ = time; }
   DataType get_type() const { return data_type_; }
   virtual std::string to_string() = 0;
 
@@ -83,6 +85,10 @@ public:
 
 public:
   GnssData(const NavTime &time) : BaseData(time)
+  {
+    data_type_ = GNSSDATA;
+  }
+  GnssData() : BaseData()
   {
     data_type_ = GNSSDATA;
   }
@@ -118,19 +124,23 @@ public:
   {
     data_type_ = IMUDATA;
   }
+  ImuData() : BaseData()
+  {
+    data_type_ = IMUDATA;
+  }
   virtual ~ImuData() {}
   virtual std::string to_string() override
   {
     std::ostringstream osstream;
     osstream << t0_.Time2String() << "\t";
-    osstream << std::fixed << std::setprecision(6) << std::setw(14) << gyro.transpose();
-    osstream << std::fixed << std::setprecision(6) << std::setw(14) << acce.transpose();
+    osstream << std::fixed << std::setprecision(6) << std::setw(14) << gyro_.transpose();
+    osstream << std::fixed << std::setprecision(6) << std::setw(14) << acce_.transpose();
     return osstream.str();
   }
 
 public:
-  Eigen::Vector3d gyro{0, 0, 0};
-  Eigen::Vector3d acce{0, 0, 0};
+  Eigen::Vector3d gyro_{0, 0, 0};
+  Eigen::Vector3d acce_{0, 0, 0};
 };
 
 class OdoData : public BaseData
@@ -140,6 +150,10 @@ public:
 
 public:
   OdoData(const NavTime &time) : BaseData(time)
+  {
+    data_type_ = ODODATA;
+  }
+  OdoData() : BaseData()
   {
     data_type_ = ODODATA;
   }
@@ -158,9 +172,10 @@ public:
   Eigen::Vector4d odo_vel{0, 0, 0, 0};
 };
 
-struct NavResultInfo
+struct NavInfo
 {
   NavTime time_;
+  Eigen::Quaterniond quat_{0, 0, 0, 0};
   Eigen::Vector3d pos_{0, 0, 0};
   Eigen::Vector3d vel_{0, 0, 0};
   Eigen::Vector3d att_{0, 0, 0};
@@ -173,6 +188,7 @@ struct NavResultInfo
   Eigen::Vector3d acce_bias_{0, 0, 0};
   Eigen::Vector3d gyro_scale_{0, 0, 0};
   Eigen::Vector3d acce_scale_{0, 0, 0};
+  Eigen::Vector3d leverarm_{0, 0, 0};
   long long int result_type_;
 };
 
