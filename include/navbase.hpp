@@ -5,7 +5,7 @@
 ** Login   <fangwentao>
 **
 ** Started on  Thu Jul 11 上午9:11:49 2019 little fang
-** Last update Mon Jul 14 下午4:28:00 2019 little fang
+** Last update Thu Jul 17 下午5:57:33 2019 little fang
 */
 
 #ifndef UTIL_BASE_H_
@@ -18,6 +18,7 @@
 #include <Eigen/Dense>
 
 #include "navstruct.hpp"
+#include "constant.hpp"
 
 namespace utiltool
 {
@@ -72,6 +73,11 @@ operator<<(std::ostream &output, const std::vector<T> &data)
     return output;
 }
 
+std::ostream &operator<<(std::ostream &output, const NavTime &time)
+{
+    output << time.Time2String() << " " << time.Time2String("%d %10.3f", NavTime::GPSTIME) << "\t";
+    return output;
+}
 /**
  * @brief  override the ostream output NavResultInfo
  * @note   
@@ -81,10 +87,10 @@ operator<<(std::ostream &output, const std::vector<T> &data)
  */
 std::ostream &operator<<(std::ostream &output, const NavInfo &nav_info)
 {
-    output << nav_info.time_.Time2String() << " " << nav_info.time_.Time2String("%d %.1f", NavTime::GPSTIME) << "\t";
+    output << nav_info.time_ << "\t";
     output << nav_info.pos_.transpose() << "\t";
     output << nav_info.vel_.transpose() << "\t";
-    output << nav_info.att_.transpose() << "\t";
+    output << nav_info.att_.transpose() * constant::rad2deg << "\t";
     output << nav_info.pos_std_.transpose() << "\t";
     output << nav_info.vel_std_.transpose() << "\t";
     output << nav_info.att_std_.transpose() << "\t";
