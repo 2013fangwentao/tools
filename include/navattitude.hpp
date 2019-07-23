@@ -18,7 +18,6 @@
 namespace utiltool
 {
 
-
 namespace attitude
 {
 
@@ -31,10 +30,7 @@ using Euler = Eigen::Vector3d; /*roll, pitch, heading*/
  * @param  q: quaternion 
  * @retval rotation matrix 
  */
-Eigen::Matrix3d Quaternion2RotationMatrix(const Eigen::Quaterniond &q)
-{
-    return q.toRotationMatrix();
-}
+Eigen::Matrix3d Quaternion2RotationMatrix(const Eigen::Quaterniond &q);
 
 /**
   * @brief  rotation martrix to quaternion by Eigen
@@ -42,11 +38,7 @@ Eigen::Matrix3d Quaternion2RotationMatrix(const Eigen::Quaterniond &q)
   * @param  mat: 
   * @retval 
   */
-Eigen::Quaterniond RotationMartix2Quaternion(const Eigen::Matrix3d &mat)
-{
-    Eigen::Quaterniond q(mat);
-    return q;
-}
+Eigen::Quaterniond RotationMartix2Quaternion(const Eigen::Matrix3d &mat);
 
 /**
  * @brief  
@@ -54,14 +46,7 @@ Eigen::Quaterniond RotationMartix2Quaternion(const Eigen::Matrix3d &mat)
  * @param  &euler: 
  * @retval 
  */
-Eigen::Quaterniond Euler2Quaternion(const Euler &euler)
-{
-    //TODO need check the order
-    //DONE check by little fang in 20190712
-    return (Eigen::AngleAxisd(euler[2], Eigen::Vector3d::UnitZ()) *
-            Eigen::AngleAxisd(euler[1], Eigen::Vector3d::UnitY()) *
-            Eigen::AngleAxisd(euler[0], Eigen::Vector3d::UnitX()));
-}
+Eigen::Quaterniond Euler2Quaternion(const Euler &euler);
 
 /**
  * @brief  Euler angle to rotation matrix
@@ -69,10 +54,7 @@ Eigen::Quaterniond Euler2Quaternion(const Euler &euler)
  * @param  euler: Euler angle
  * @retval 
  */
-Eigen::Matrix3d Euler2RotationMatrix(const Euler &euler)
-{
-    return Quaternion2RotationMatrix(Euler2Quaternion(euler));
-}
+Eigen::Matrix3d Euler2RotationMatrix(const Euler &euler);
 
 /**
   * @brief  Rotation Matrix to Euler by Eigen
@@ -80,12 +62,7 @@ Eigen::Matrix3d Euler2RotationMatrix(const Euler &euler)
   * @param  &mat: 
   * @retval 
   */
-Euler RotationMartix2Euler(const Eigen::Matrix3d &mat)
-{
-    // TODO need to check the order of the axis coincide with roll>pitch>heading/yaw
-    // DONE check by little fang. writed by ourselies, do not use Eigen.
-    return eulerAngles(mat);
-}
+Euler RotationMartix2Euler(const Eigen::Matrix3d &mat);
 
 /**
  * @brief  quaternion to euler by rotation matirx
@@ -93,10 +70,7 @@ Euler RotationMartix2Euler(const Eigen::Matrix3d &mat)
  * @param  q: quaternion
  * @retval 
  */
-Euler Quaternion2Euler(const Eigen::Quaterniond &q)
-{
-    return RotationMartix2Euler(q.toRotationMatrix());
-}
+Euler Quaternion2Euler(const Eigen::Quaterniond &q);
 
 /**
  * @brief  according the rotation vector construct the Quaternion
@@ -104,15 +78,7 @@ Euler Quaternion2Euler(const Eigen::Quaterniond &q)
  * @param  rv: Equivalent rotation vector 
  * @retval 
  */
-Eigen::Quaterniond RotationVector2Quaternion(const RotationVector &rv)
-{
-    Eigen::Quaterniond qfromrv;
-    RotationVector rv_2 = rv * 0.5;
-    double norm = rv_2.norm();
-    qfromrv.w() = cos(norm);
-    qfromrv.vec() = norm < 1e-5 ? rv_2 : (sin(norm) / norm) * rv_2;
-    return qfromrv;
-}
+Eigen::Quaterniond RotationVector2Quaternion(const RotationVector &rv);
 
 /**
  * @brief  Rotation Vector to Rotation Matrix
@@ -120,10 +86,7 @@ Eigen::Quaterniond RotationVector2Quaternion(const RotationVector &rv)
  * @param  &rv: Equivalent rotation vector 
  * @retval 
  */
-Eigen::Matrix3d RotationVector2RotationMatrix(const RotationVector &rv)
-{
-    return Quaternion2RotationMatrix(RotationVector2Quaternion(rv));
-}
+Eigen::Matrix3d RotationVector2RotationMatrix(const RotationVector &rv);
 } // namespace attitude
 } // namespace utiltool
 

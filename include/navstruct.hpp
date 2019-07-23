@@ -5,7 +5,7 @@
 ** Login   <fangwentao>
 **
 ** Started on  Wed Jul 3 14:38:27 2019 little fang
-** Last update Wed Jul 16 下午10:54:58 2019 little fang
+** Last update Sat Jul 19 下午5:24:56 2019 little fang
 */
 
 #ifndef NAVSTRUCT_H_
@@ -18,6 +18,7 @@
 #include <iostream>
 #include <iomanip>
 #include <sstream>
+#include <deque>
 #include <Eigen/Dense>
 
 #include "navtime.h"
@@ -58,19 +59,26 @@ enum GnssType
   GNSSRAW
 };
 
+enum GnssFormatType
+{
+  GNSSPOS = 0,
+  GNSSPOSVEL = 1,
+  GNSSVEL = 2 //仅备用,应该不考虑这样的观测值
+};
+
 class BaseData
 {
 public:
   BaseData(const NavTime &time) : t0_(time) {}
   BaseData() {}
   virtual ~BaseData() {}
+  using bPtr = std::shared_ptr<BaseData>;
 
 public:
-  using Ptr = BaseData *;
   NavTime get_time() const { return t0_; }
-  NavTime set_time(const NavTime &time) { t0_ = time; }
+  void set_time(const NavTime &time) { t0_ = time; }
   DataType get_type() const { return data_type_; }
-  virtual std::string to_string() = 0;
+  // virtual std::string to_string() { return "nullptr"; }
 
 protected:
   DataType data_type_ = DATAUNKOWN;
@@ -82,6 +90,7 @@ class GnssData : public BaseData
 {
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+  using Ptr = std::shared_ptr<GnssData>;
 
 public:
   GnssData(const NavTime &time) : BaseData(time)
@@ -94,17 +103,18 @@ public:
   }
   virtual ~GnssData() {}
 
-public:
-  virtual std::string to_string() override
-  {
-    std::ostringstream osstream;
-    osstream << t0_.Time2String() << "\t";
-    osstream << std::fixed << std::setprecision(9) << std::setw(13) << pos_.transpose();
-    osstream << std::fixed << std::setprecision(4) << std::setw(7) << vel_.transpose();
-    osstream << std::fixed << std::setprecision(4) << std::setw(7) << pos_std_.transpose();
-    osstream << std::fixed << std::setprecision(4) << std::setw(7) << vel_std_.transpose();
-    return osstream.str();
-  }
+// public:
+//   virtual std::string to_string() override
+//   {
+//     std::ostringstream osstream;
+//     osstream << t0_.Time2String() << "\t";
+//     osstream << std::fixed << std::setprecision(9) << std::setw(13) << pos_.transpose() << "\t";
+//     osstream << std::fixed << std::setprecision(4) << std::setw(7) << vel_.transpose() << "\t";
+//     osstream << std::fixed << std::setprecision(4) << std::setw(7) << pos_std_.transpose() << "\t";
+//     osstream << std::fixed << std::setprecision(4) << std::setw(7) << vel_std_.transpose() << "\t";
+//     osstream << std::fixed << gnss_type_;
+//     return osstream.str();
+//   }
 
 public:
   Eigen::Vector3d pos_{0, 0, 0};
@@ -112,12 +122,14 @@ public:
   Eigen::Vector3d pos_std_{0, 0, 0};
   Eigen::Vector3d vel_std_{0, 0, 0};
   GnssType gnss_type_ = GNSSUNKOWN;
+  GnssFormatType format_type_ = GNSSPOS;
 };
 
 class ImuData : public BaseData
 {
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+  using Ptr = std::shared_ptr<ImuData>;
 
 public:
   ImuData(const NavTime &time) : BaseData(time)
@@ -129,24 +141,36 @@ public:
     data_type_ = IMUDATA;
   }
   virtual ~ImuData() {}
-  virtual std::string to_string() override
-  {
-    std::ostringstream osstream;
-    osstream << t0_.Time2String() << "\t";
-    osstream << std::fixed << std::setprecision(6) << std::setw(14) << gyro_.transpose();
-    osstream << std::fixed << std::setprecision(6) << std::setw(14) << acce_.transpose();
-    return osstream.str();
-  }
+  // virtual std::string to_string() override
+  // {
+  //   std::ostringstream osstream;
+  //   osstream << t0_.Time2String() << "\t";
+  //   osstream << std::fixed << std::setprecision(6) << std::setw(14) << gyro_.transpose() << "\t";
+  //   osstream << std::fixed << std::setprecision(6) << std::setw(14) << acce_.transpose() << "\t";
+  //   return osstream.str();
+  // }
 
 public:
   Eigen::Vector3d gyro_{0, 0, 0};
   Eigen::Vector3d acce_{0, 0, 0};
 };
-
+// for accumulate function
+struct imu_accumulate
+{
+public:
+  ImuData::Ptr operator()(const ImuData::Ptr &imu1, const ImuData::Ptr &imu2)
+  {
+    ImuData::Ptr imu = std::make_shared<ImuData>(*imu2);
+    imu->acce_ += imu1->acce_;
+    imu->gyro_ += imu1->gyro_;
+    return imu;
+  }
+};
 class OdoData : public BaseData
 {
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+  using Ptr = std::shared_ptr<OdoData>;
 
 public:
   OdoData(const NavTime &time) : BaseData(time)
@@ -159,18 +183,21 @@ public:
   }
   virtual ~OdoData() {}
 
-public:
-  virtual std::string to_string() override
-  {
-    std::ostringstream osstream;
-    osstream << t0_.Time2String() << "\t";
-    osstream << std::fixed << std::setprecision(5) << std::setw(10) << odo_vel.transpose();
-    return osstream.str();
-  }
+// public:
+//   virtual std::string to_string() override
+//   {
+//     std::ostringstream osstream;
+//     osstream << t0_.Time2String() << "\t";
+//     osstream << std::fixed << std::setprecision(5) << std::setw(10) << odo_vel.transpose();
+//     return osstream.str();
+//   }
 
 public:
   Eigen::Vector4d odo_vel{0, 0, 0, 0};
 };
+
+using GNSSDATAPOOL = std::deque<GnssData::Ptr>;
+using IMUDATAPOOL = std::deque<ImuData::Ptr>;
 
 struct NavInfo
 {
@@ -190,6 +217,22 @@ struct NavInfo
   Eigen::Vector3d acce_scale_{0, 0, 0};
   Eigen::Vector3d leverarm_{0, 0, 0};
   long long int result_type_;
+};
+
+struct StateIndex
+{
+  int pos_index_ = 0;
+  int vel_index_ = 0;
+  int att_index_ = 0;
+  int gyro_bias_index_ = 0;
+  int acce_bias_index_ = 0;
+  int gyro_scale_index_ = 0;
+  int acce_scale_index_ = 0;
+  int odometer_scale_index = 0;
+  int camera_delay_index_ = 0;
+  int camera_rotation_index_ = 0;
+  int camera_translation_index_ = 0;
+  int imu_vehicle_rotation_index_ = 0;
 };
 
 } // namespace utiltool
