@@ -233,6 +233,7 @@ struct StateIndex
   int camera_rotation_index_ = 0;
   int camera_translation_index_ = 0;
   int imu_vehicle_rotation_index_ = 0;
+  bool is_initialized = false;
 };
 
 } // namespace utiltool
