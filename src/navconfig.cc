@@ -52,4 +52,5 @@ bool ConfigInfo::open(const char *config_file_path)
  * @retval
  */
 ConfigInfo::Ptr ConfigInfo::GetInstance() { return config_info; }
+
 } // namespace utiltool

@@ -6,8 +6,8 @@
 namespace utiltool
 {
 
-const double NavTime::MAXSECONDOFDAY = 86400.0;
-const double NavTime::MAXSECONDOFWEEK = 86400.0 * 7;
+const int NavTime::MAXSECONDOFDAY = 86400;
+const int NavTime::MAXSECONDOFWEEK = 86400 * 7;
 
 NavTime::NavTime() { NavTime(0, 0, 0, 0, 0, 0.0); }
 

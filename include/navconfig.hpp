@@ -5,7 +5,7 @@
 ** Login   <fangwentao>
 **
 ** Started on  Tue May 14 8:17:51 2019 little fang
-** Last update Sun Jul 13 ??2:52:19 2019 little fang
+** Last update Tue Jul 22 下午5:01:37 2019 little fang
 */
 
 #ifndef UTIL_CONFIG_H_
@@ -84,7 +84,7 @@ public:
         for (auto index : text)
         {
           double value = stod(index);
-          data.push_back(static_cast<T>(value));
+          data.emplace_back(static_cast<T>(value));
         }
       }
       catch (const std::exception &e)
@@ -104,7 +104,7 @@ public:
 };
 
 template <>
-std::string ConfigInfo::get<std::string>(std::string key)
+inline std::string ConfigInfo::get<std::string>(std::string key)
 {
   transform(key.begin(), key.end(), key.begin(), ::tolower);
   if (storage.count(key) > 0)
@@ -129,7 +129,7 @@ std::string ConfigInfo::get<std::string>(std::string key)
 }
 
 template <>
-std::vector<std::string> ConfigInfo::get_array<std::string>(std::string key)
+inline std::vector<std::string> ConfigInfo::get_array<std::string>(std::string key)
 {
   std::vector<std::string> data;
   transform(key.begin(), key.end(), key.begin(), ::tolower);

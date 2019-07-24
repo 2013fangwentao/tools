@@ -39,8 +39,8 @@ struct MODIFYJULIANDAY
 class NavTime
 {
 public:
-  static const double MAXSECONDOFDAY;
-  static const double MAXSECONDOFWEEK;
+  static const int MAXSECONDOFDAY;
+  static const int MAXSECONDOFWEEK;
 
   enum TimeType
   {
