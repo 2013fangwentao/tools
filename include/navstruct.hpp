@@ -5,7 +5,7 @@
 ** Login   <fangwentao>
 **
 ** Started on  Wed Jul 3 14:38:27 2019 little fang
-** Last update Sat Jul 19 下午5:24:56 2019 little fang
+** Last update Thu Jul 31 下午3:20:10 2019 little fang
 */
 
 #ifndef NAVSTRUCT_H_
@@ -202,7 +202,8 @@ using IMUDATAPOOL = std::deque<ImuData::Ptr>;
 struct NavInfo
 {
   NavTime time_;
-  Eigen::Quaterniond quat_{0, 0, 0, 0};
+  Eigen::Quaterniond quat_{1, 0, 0, 0};
+  Eigen::Matrix3d rotation_ = Eigen::Matrix3d::Identity();
   Eigen::Vector3d pos_{0, 0, 0};
   Eigen::Vector3d vel_{0, 0, 0};
   Eigen::Vector3d att_{0, 0, 0};
