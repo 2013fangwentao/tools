@@ -36,6 +36,9 @@ std::string &trim(std::string &s);
 
 std::ostream &operator<<(std::ostream &output, const NavTime &time);
 
+NavInfo InterpolateNavInfo(const NavInfo &nav_info1, const NavInfo &nav_info2, const NavTime &time_);
+
+NavInfo &NormalizeAttitude(NavInfo &nav_info);
 /**
  * @brief  override the ostream output NavResultInfo
  * @note   
@@ -103,6 +106,14 @@ operator<<(std::ostream &output, const std::vector<T> &data)
   }
   return output;
 }
+
+template <typename T>
+T interpolate(const T &t1, const T &t2, double coeff)
+{
+  T t_res = t1 + (t2 - t1) * coeff;
+  return t_res;
+}
+
 } // namespace utiltool
 
 #endif /* !UTIL_BASE_H_ */

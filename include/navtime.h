@@ -60,7 +60,7 @@ public:
   NavTime operator-(double second);
   NavTime operator+(int second);
   NavTime operator-(int second);
-  double operator-(const NavTime &time);
+  double operator-(const NavTime &time) const;
   void operator+=(double second);
   void operator-=(double second);
   bool operator<(const NavTime &time) const;

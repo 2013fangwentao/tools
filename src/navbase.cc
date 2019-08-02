@@ -1,5 +1,8 @@
 
 #include "navbase.hpp"
+#include "navearth.hpp"
+#include "navattitude.hpp"
+#include <Eigen/Geometry>
 
 namespace utiltool
 {
@@ -51,16 +54,16 @@ std::ostream &operator<<(std::ostream &output, const NavTime &time)
 std::ostream &operator<<(std::ostream &output, const NavInfo &nav_info)
 {
     output << nav_info.time_ << "\t";
-    output << nav_info.pos_.transpose() << "\t";
-    output << nav_info.vel_.transpose() << "\t";
-    output << nav_info.att_.transpose() * constant::rad2deg << "\t";
-    output << nav_info.pos_std_.transpose() << "\t";
-    output << nav_info.vel_std_.transpose() << "\t";
-    output << nav_info.att_std_.transpose() << "\t";
-    output << nav_info.gyro_bias_.transpose() << "\t";
-    output << nav_info.acce_bias_.transpose() << "\t";
-    output << nav_info.gyro_scale_.transpose() << "\t";
-    output << nav_info.acce_scale_.transpose();
+    output << std::fixed << std::setprecision(4) << nav_info.pos_.transpose() << "\t";
+    output << std::fixed << std::setprecision(4) << nav_info.vel_.transpose() << "\t";
+    output << std::fixed << std::setprecision(4) << nav_info.att_.transpose() * constant::rad2deg << "\t";
+    // output <<std::fixed << std::setprecision(3) << nav_info.pos_std_.transpose() << "\t";
+    // output <<std::fixed << std::setprecision(3) << nav_info.vel_std_.transpose() << "\t";
+    // output <<std::fixed << std::setprecision(3) << nav_info.att_std_.transpose() << "\t";
+    output << std::fixed << std::setprecision(3) << nav_info.gyro_bias_.transpose() * constant::rs2dh << "\t";
+    output << std::fixed << std::setprecision(3) << nav_info.acce_bias_.transpose() / constant::constant_mGal << "\t";
+    output << std::fixed << std::setprecision(3) << nav_info.gyro_scale_.transpose() / constant::constant_ppm << "\t";
+    output << std::fixed << std::setprecision(3) << nav_info.acce_scale_.transpose() / constant::constant_ppm;
     return output;
 }
 
@@ -144,6 +147,48 @@ Eigen::Matrix3d skew(const Eigen::Vector3d &vector)
     dcm1(2, 2) = 0;
 
     return dcm1;
+}
+
+/**
+ * @brief  update the attitude about
+ * @note   
+ * @param  &nav_info: 
+ * @retval 
+ */
+NavInfo &NormalizeAttitude(NavInfo &nav_info)
+{
+    nav_info.rotation_ = attitude::Quaternion2RotationMatrix(nav_info.quat_);
+    auto BLH = earth::WGS84XYZ2BLH(nav_info.pos_);
+    nav_info.att_ = attitude::RotationMartix2Euler(earth::CalCe2n(BLH(0), BLH(1)) * nav_info.rotation_);
+    return nav_info;
+}
+
+/**
+ * @brief  
+ * @note   
+ * @param  &nav_info1: the early information
+ * @param  &nav_info2: the later information
+ * @param  &time_: interplation time
+ * @retval 
+ */
+NavInfo InterpolateNavInfo(const NavInfo &nav_info1, const NavInfo &nav_info2, const NavTime &time)
+{
+    double coeff = (time - nav_info1.time_) / (nav_info2.time_ - nav_info1.time_);
+    NavInfo result;
+    result.time_ = time;
+    result.pos_ = interpolate(nav_info1.pos_, nav_info2.pos_, coeff);
+    result.vel_ = interpolate(nav_info1.vel_, nav_info2.vel_, coeff);
+    result.quat_ = nav_info1.quat_.slerp(coeff, nav_info2.quat_);
+    result.pos_std_ = interpolate(nav_info1.pos_std_, nav_info2.pos_std_, coeff);
+    result.vel_std_ = interpolate(nav_info1.vel_std_, nav_info2.vel_std_, coeff);
+    result.att_std_ = interpolate(nav_info1.att_std_, nav_info2.att_std_, coeff);
+    result.gyro_bias_ = interpolate(nav_info1.gyro_bias_, nav_info2.gyro_bias_, coeff);
+    result.acce_bias_ = interpolate(nav_info1.acce_bias_, nav_info2.acce_bias_, coeff);
+    result.fibb_ = interpolate(nav_info1.fibb_, nav_info2.fibb_, coeff);
+    result.gyro_scale_ = interpolate(nav_info1.gyro_scale_, nav_info2.gyro_scale_, coeff);
+    result.wibb_ = interpolate(nav_info1.wibb_, nav_info2.wibb_, coeff);
+    NormalizeAttitude(result);
+    return result;
 }
 
 } // namespace utiltool

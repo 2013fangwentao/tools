@@ -12,6 +12,8 @@
 #define UTIL_EARTH_H_
 
 #include "constant.hpp"
+#include "navstruct.hpp"
+#include "navbase.hpp"
 #include <Eigen/Dense>
 
 namespace utiltool
@@ -76,7 +78,7 @@ inline Eigen::Vector3d wiee() { return Eigen::Vector3d(0, 0, WGS84_AngleRate); }
  * @param  &navinfo: 
  * @retval 
  */
-Eigen::Vector3d CorrectLeverarmPos(const utiltool::NavInfo &navinfo)
+inline Eigen::Vector3d CorrectLeverarmPos(const NavInfo &navinfo)
 {
   return navinfo.pos_ + navinfo.rotation_ * navinfo.leverarm_;
 }
@@ -87,13 +89,13 @@ Eigen::Vector3d CorrectLeverarmPos(const utiltool::NavInfo &navinfo)
  * @param  &navinfo: 
  * @retval 
  */
-inline Eigen::Vector3d CorrectLeverarmVel(const utiltool::NavInfo &navinfo)
+inline Eigen::Vector3d CorrectLeverarmVel(const NavInfo &navinfo)
 {
   Eigen::Matrix3d wie_x = skew(wiee());
   Eigen::Matrix3d lb_x = skew(navinfo.leverarm_);
   auto &lb = navinfo.leverarm_;
   auto &Rbe = navinfo.rotation_;
-  return navinfo.vel_ - wie_x * Rbe *lb - Rbe * lb_x * navinfo.wibb_;
+  return navinfo.vel_ - wie_x * Rbe * lb - Rbe * lb_x * navinfo.wibb_;
 }
 
 } // namespace earth
