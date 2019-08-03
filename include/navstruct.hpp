@@ -218,6 +218,8 @@ struct NavInfo
   Eigen::Vector3d acce_scale_{0, 0, 0};
   Eigen::Vector3d leverarm_{0, 0, 0};
   long long int result_type_;
+public:  
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 struct StateIndex
@@ -234,6 +236,7 @@ struct StateIndex
   int camera_rotation_index_ = 0;
   int camera_translation_index_ = 0;
   int imu_vehicle_rotation_index_ = 0;
+  int total_state = 0;
   bool is_initialized = false;
 };
 
