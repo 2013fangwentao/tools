@@ -5,7 +5,7 @@
 ** Login   <fangwentao>
 **
 ** Started on  Wed Jul 3 14:38:27 2019 little fang
-** Last update Thu Jul 31 下午3:20:10 2019 little fang
+** Last update Sat Aug 9 下午3:15:19 2019 little fang
 */
 
 #ifndef NAVSTRUCT_H_
@@ -20,7 +20,7 @@
 #include <sstream>
 #include <deque>
 #include <Eigen/Dense>
-
+#include <map>
 #include "navtime.h"
 
 namespace utiltool
@@ -103,18 +103,18 @@ public:
   }
   virtual ~GnssData() {}
 
-// public:
-//   virtual std::string to_string() override
-//   {
-//     std::ostringstream osstream;
-//     osstream << t0_.Time2String() << "\t";
-//     osstream << std::fixed << std::setprecision(9) << std::setw(13) << pos_.transpose() << "\t";
-//     osstream << std::fixed << std::setprecision(4) << std::setw(7) << vel_.transpose() << "\t";
-//     osstream << std::fixed << std::setprecision(4) << std::setw(7) << pos_std_.transpose() << "\t";
-//     osstream << std::fixed << std::setprecision(4) << std::setw(7) << vel_std_.transpose() << "\t";
-//     osstream << std::fixed << gnss_type_;
-//     return osstream.str();
-//   }
+  // public:
+  //   virtual std::string to_string() override
+  //   {
+  //     std::ostringstream osstream;
+  //     osstream << t0_.Time2String() << "\t";
+  //     osstream << std::fixed << std::setprecision(9) << std::setw(13) << pos_.transpose() << "\t";
+  //     osstream << std::fixed << std::setprecision(4) << std::setw(7) << vel_.transpose() << "\t";
+  //     osstream << std::fixed << std::setprecision(4) << std::setw(7) << pos_std_.transpose() << "\t";
+  //     osstream << std::fixed << std::setprecision(4) << std::setw(7) << vel_std_.transpose() << "\t";
+  //     osstream << std::fixed << gnss_type_;
+  //     return osstream.str();
+  //   }
 
 public:
   Eigen::Vector3d pos_{0, 0, 0};
@@ -183,14 +183,14 @@ public:
   }
   virtual ~OdoData() {}
 
-// public:
-//   virtual std::string to_string() override
-//   {
-//     std::ostringstream osstream;
-//     osstream << t0_.Time2String() << "\t";
-//     osstream << std::fixed << std::setprecision(5) << std::setw(10) << odo_vel.transpose();
-//     return osstream.str();
-//   }
+  // public:
+  //   virtual std::string to_string() override
+  //   {
+  //     std::ostringstream osstream;
+  //     osstream << t0_.Time2String() << "\t";
+  //     osstream << std::fixed << std::setprecision(5) << std::setw(10) << odo_vel.transpose();
+  //     return osstream.str();
+  //   }
 
 public:
   Eigen::Vector4d odo_vel{0, 0, 0, 0};
@@ -218,7 +218,8 @@ struct NavInfo
   Eigen::Vector3d acce_scale_{0, 0, 0};
   Eigen::Vector3d leverarm_{0, 0, 0};
   long long int result_type_;
-public:  
+
+public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
@@ -236,7 +237,9 @@ struct StateIndex
   int camera_rotation_index_ = 0;
   int camera_translation_index_ = 0;
   int imu_vehicle_rotation_index_ = 0;
-  int total_state = 0;
+  int total_state = 0;  //exclude camera state
+  std::map<long long int, int, std::less<long long int>>
+      camera_state_index; //fisrt CameraState ID，second CameraState index
   bool is_initialized = false;
 };
 
