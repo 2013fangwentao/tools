@@ -76,9 +76,9 @@ std::ostream &operator<<(std::ostream &output, const NavInfo &nav_info)
  */
 std::ostream &operator<<(std::ostream &output, const ImuData &imu_data)
 {
-    output << imu_data.get_time() << "\t";
-    output << imu_data.gyro_.transpose() << "\t";
-    output << imu_data.acce_.transpose() << "\t";
+    output << imu_data.get_time() << "  ";
+    output << imu_data.gyro_.transpose() << "  ";
+    output << imu_data.acce_.transpose() << "  ";
     return output;
 }
 /**
@@ -173,6 +173,10 @@ NavInfo &NormalizeAttitude(NavInfo &nav_info)
  */
 NavInfo InterpolateNavInfo(const NavInfo &nav_info1, const NavInfo &nav_info2, const NavTime &time)
 {
+    if(abs(time - nav_info1.time_) < 1e-8)
+        return nav_info1;
+    if (abs(time - nav_info2.time_) < 1e-8)
+        return nav_info2;
     double coeff = (time - nav_info1.time_) / (nav_info2.time_ - nav_info1.time_);
     NavInfo result;
     result.time_ = time;
