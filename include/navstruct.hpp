@@ -5,7 +5,7 @@
 ** Login   <fangwentao>
 **
 ** Started on  Wed Jul 3 14:38:27 2019 little fang
-** Last update Sat Aug 9 下午3:15:19 2019 little fang
+** Last update Thu Aug 21 下午9:29:43 2019 little fang
 */
 
 #ifndef NAVSTRUCT_H_
@@ -45,7 +45,7 @@ enum DataType
   IMUDATA,
   GNSSDATA,
   ODODATA,
-  FEATUREDATA,
+  CAMERADATA,
   RESULTDATA
 };
 
