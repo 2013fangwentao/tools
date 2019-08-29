@@ -53,17 +53,17 @@ std::ostream &operator<<(std::ostream &output, const NavTime &time)
  */
 std::ostream &operator<<(std::ostream &output, const NavInfo &nav_info)
 {
-    output << nav_info.time_ << "\t";
-    output << std::fixed  << std::setprecision(4) << nav_info.pos_.transpose() << "\t";
-    output << std::fixed << std::setw(7) << std::setprecision(4) << nav_info.vel_.transpose() << "\t";
-    output << std::fixed << std::setw(9) << std::setprecision(4) << nav_info.att_.transpose() * constant::rad2deg << "\t";
-    // output <<std::fixed << std::setprecision(3) << nav_info.pos_std_.transpose() << "\t";
-    // output <<std::fixed << std::setprecision(3) << nav_info.vel_std_.transpose() << "\t";
-    // output <<std::fixed << std::setprecision(3) << nav_info.att_std_.transpose() << "\t";
-    output << std::fixed << std::setw(5) << std::setprecision(3) << nav_info.gyro_bias_.transpose() * constant::rs2dh << "\t";
-    output << std::fixed << std::setw(8) << std::setprecision(3) << nav_info.acce_bias_.transpose() / constant::constant_mGal << "\t";
-    output << std::fixed << std::setw(7) << std::setprecision(3) << nav_info.gyro_scale_.transpose() / constant::constant_ppm << "\t";
-    output << std::fixed << std::setw(4) << std::setprecision(3) << nav_info.acce_scale_.transpose() / constant::constant_ppm;
+    output << nav_info.time_ << "   ";
+    output << std::fixed << std::left << std::setprecision(4) << nav_info.pos_.transpose() << "   ";
+    output << std::fixed << std::left << std::setw(10) << std::setprecision(4) << nav_info.vel_.transpose() << "   ";
+    output << std::fixed << std::left << std::setw(10) << std::setprecision(4) << nav_info.att_.transpose() * constant::rad2deg << "   ";
+    // output <<std::fixed << std::left << std::setprecision(3) << nav_info.pos_std_.transpose() << "   ";
+    // output <<std::fixed << std::left << std::setprecision(3) << nav_info.vel_std_.transpose() << "   ";
+    // output <<std::fixed << std::left << std::setprecision(3) << nav_info.att_std_.transpose() << "   ";
+    output << std::fixed << std::left << std::setw(10) << std::setprecision(3) << nav_info.gyro_bias_.transpose() * constant::rs2dh << "   ";
+    output << std::fixed << std::left << std::setw(10) << std::setprecision(3) << nav_info.acce_bias_.transpose() / constant::constant_mGal << "   ";
+    output << std::fixed << std::left << std::setw(10) << std::setprecision(3) << nav_info.gyro_scale_.transpose() / constant::constant_ppm << "   ";
+    output << std::fixed << std::left << std::setw(10) << std::setprecision(3) << nav_info.acce_scale_.transpose() / constant::constant_ppm;
     return output;
 }
 
@@ -174,7 +174,7 @@ NavInfo &NormalizeAttitude(NavInfo &nav_info)
 NavInfo InterpolateNavInfo(const NavInfo &nav_info1, const NavInfo &nav_info2, const NavTime &time)
 {
     double coeff = (time - nav_info1.time_) / (nav_info2.time_ - nav_info1.time_);
-    NavInfo result;
+    NavInfo result = nav_info2;
     result.time_ = time;
     result.pos_ = interpolate(nav_info1.pos_, nav_info2.pos_, coeff);
     result.vel_ = interpolate(nav_info1.vel_, nav_info2.vel_, coeff);
