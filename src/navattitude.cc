@@ -93,7 +93,7 @@ Eigen::Quaterniond RotationVector2Quaternion(const RotationVector &rv)
     RotationVector rv_2 = rv * 0.5;
     double norm = rv_2.norm();
     qfromrv.w() = cos(norm);
-    qfromrv.vec() = norm < 1e-5 ? rv_2 : (sin(norm) / norm) * rv_2;
+    qfromrv.vec() = norm < 1e-8 ? rv_2 : (sin(norm) / norm) * rv_2;
     return qfromrv;
 }
 
