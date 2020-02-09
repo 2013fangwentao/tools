@@ -39,7 +39,6 @@ Eigen::Quaterniond RotationMartix2Quaternion(const Eigen::Matrix3d &mat)
  */
 Eigen::Quaterniond Euler2Quaternion(const Euler &euler)
 {
-    //TODO need check the order
     //DONE check by little fang in 20190712
     return (Eigen::AngleAxisd(euler[2], Eigen::Vector3d::UnitZ()) *
             Eigen::AngleAxisd(euler[1], Eigen::Vector3d::UnitY()) *
@@ -65,7 +64,6 @@ Eigen::Matrix3d Euler2RotationMatrix(const Euler &euler)
   */
 Euler RotationMartix2Euler(const Eigen::Matrix3d &mat)
 {
-    // TODO need to check the order of the axis coincide with roll>pitch>heading/yaw
     // DONE check by little fang. writed by ourselies, do not use Eigen.
     return eulerAngles(mat);
 }
