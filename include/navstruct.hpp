@@ -217,6 +217,7 @@ struct NavInfo
   Eigen::Vector3d gyro_scale_{0, 0, 0};
   Eigen::Vector3d acce_scale_{0, 0, 0};
   Eigen::Vector3d leverarm_{0, 0, 0};
+  Eigen::Vector3d cam_imu_{0, 0, 0};
   long long int result_type_;
 
 public:

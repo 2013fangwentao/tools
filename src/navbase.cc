@@ -57,6 +57,7 @@ std::ostream &operator<<(std::ostream &output, const NavInfo &nav_info)
     output << std::fixed << std::left << std::setprecision(4) << nav_info.pos_.transpose() << "   ";
     output << std::fixed << std::left << std::setw(10) << std::setprecision(4) << nav_info.vel_.transpose() << "   ";
     output << std::fixed << std::left << std::setw(10) << std::setprecision(4) << nav_info.att_.transpose() * constant::rad2deg << "   ";
+    output << std::fixed << std::left << std::setw(10) << std::setprecision(4) << nav_info.cam_imu_.transpose() * constant::rad2deg << "   ";
     // output <<std::fixed << std::left << std::setprecision(3) << nav_info.pos_std_.transpose() << "   ";
     // output <<std::fixed << std::left << std::setprecision(3) << nav_info.vel_std_.transpose() << "   ";
     // output <<std::fixed << std::left << std::setprecision(3) << nav_info.att_std_.transpose() << "   ";
