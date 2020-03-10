@@ -26,7 +26,7 @@ inline void LogInit(const char *argv, const std::string &path, int loglevel = 0)
 #ifdef GLOGOUTPUT
   FLAGS_stderrthreshold = loglevel;
   google::InitGoogleLogging((const char *)argv);
-  google::SetLogDestination(loglevel, path.c_str());
+  google::SetLogDestination(0, path.c_str());
 #else
   FLAGS_stderrthreshold = google::FATAL;
   google::InitGoogleLogging((const char *)argv);

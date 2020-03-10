@@ -22,6 +22,6 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 aux_source_directory(${PROJECT_SOURCE_DIR}/src cpp_files)
 
 add_library(${PROJECT_NAME} SHARED ${cpp_files})
-target_link_libraries(${PROJECT_NAME}  glog::glog)
+target_link_libraries(${PROJECT_NAME}  ${GLOG_LIBRARY})
 
-add_subdirectory(${PROJECT_SOURCE_DIR}/test)
+# add_subdirectory(${PROJECT_SOURCE_DIR}/test)

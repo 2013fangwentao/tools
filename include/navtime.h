@@ -60,7 +60,7 @@ public:
   NavTime operator-(double second);
   NavTime operator+(int second);
   NavTime operator-(int second);
-  double operator-(const NavTime &time);
+  double operator-(const NavTime &time) const;
   void operator+=(double second);
   void operator-=(double second);
   bool operator<(const NavTime &time) const;
@@ -72,7 +72,7 @@ public:
 
 public:
   static NavTime NowTime();
-  std::string Time2String(const std::string &format = "%04d-%02d-%02d %02d-%02d-%04.1f", TimeType time_type = COMMONTIME) const;
+  std::string Time2String(const std::string &format = "%04d %02d %02d %02d %02d %04.1f", TimeType time_type = COMMONTIME) const;
   int Year() const;
   int Month() const;
   int Day() const;
